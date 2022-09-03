@@ -1,0 +1,12 @@
+.header__navbar {
+  margin: 0;
+  padding: 6px 0 0;
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: white;
+}

@@ -1,0 +1,7 @@
+.auth-page {
+  max-width: 358px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
