@@ -15,6 +15,7 @@ const { validationLogin, validationCreateUser } = require('./middlewares/validat
 const options = {
   origin: [
     'http://localhost:3000',
+    'http://ankotlyakov.frontend.mesto.nomoredomains.sbs',
     'https://ankotlyakov.frontend.mesto.nomoredomains.sbs',
     'https://Ankotl.github.io',
   ],
