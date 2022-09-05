@@ -15,7 +15,7 @@ const createCard = (req, res, next) => {
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы невалидные данные при создании карточки');
+        next(new BadRequest('Переданы невалидные данные при создании карточки'));
       }
     }).catch(next);
 };
@@ -27,15 +27,15 @@ const likeCard = (req, res, next) => {
     { new: true },
   )
     .orFail(() => {
-      throw new ErrorNotFound('Запрашиваемая карточка не найдена');
+      next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
     })
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные'));
+        return next(new BadRequest('Переданы некорректные данные'));
       }
       if (err.statusCode === 404) {
-        next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
+        return next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
       }
       next(err);
     });
@@ -44,15 +44,15 @@ const likeCard = (req, res, next) => {
 const dislikeCard = (req, res, next) => {
   Cards.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .orFail(() => {
-      throw new ErrorNotFound('Запрашиваемая карточка не найдена');
+      next(new ErrorNotFound('Запрашиваемая карточка не найдена')) ;
     })
     .then((card) => res.send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные для снятия лайка'));
+        return next(new BadRequest('Переданы некорректные данные для снятия лайка'));
       }
       if (err.statusCode === 404) {
-        next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
+        return next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
       }
       next(err);
     });
@@ -63,13 +63,13 @@ const deleteCard = (req, res, next) => {
 
   return Cards.findById(cardId)
     .orFail(() => {
-      throw new ErrorNotFound('Запрашиваемая карточка не найдена');
+      next(new ErrorNotFound('Запрашиваемая карточка не найдена')) ;
     })
     .then((card) => {
       if (card.owner.toString() === req.user._id) {
-        Cards.findByIdAndRemove(cardId).then(() => res.send(card));
+        Cards.findByIdAndRemove(cardId).then(() => res.send(card)).catch(next);
       } else {
-        throw new ForbiddenError('В доступе отказано');
+        next(new ForbiddenError('В доступе отказано')) ;
       }
     })
     .catch(next);

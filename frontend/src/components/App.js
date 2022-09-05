@@ -88,9 +88,11 @@ function App() {
   useEffect(() => {
     if (loggedIn) {
       api
-        .getInitialCards()
-        .then((res) => {          
-          setCards(res);
+        .getInitialData()
+        .then((res) => {
+          const [user,cards] = res  
+          setCurrentUser(user)       
+          setCards(cards);
         })
         .catch((err) => {
           console.log(err);
@@ -126,16 +128,7 @@ function App() {
       });
   }
 
-  useEffect(() => {
-    api
-      .getUserInfo()
-      .then((res) => {
-        setCurrentUser(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+ 
 
   const handleCardClick = (card) => {
     setSelectedCard(card);

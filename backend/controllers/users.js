@@ -15,7 +15,7 @@ const getUsers = (req, res, next) => {
 const getUser = (req, res, next) => {
   Users.findById(req.params.userId)
     .orFail(() => {
-      throw new ErrorNotFound('Запрашиваемый пользователь не найден');
+      next(new ErrorNotFound('Запрашиваемый пользователь не найден'));
     })
     .then((user) => res.send(user))
     .catch((err) => {
@@ -31,10 +31,6 @@ const createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-
-  if (!email || !password) {
-    next(new BadRequest('Поля email и password обязательны.'));
-  }
 
   bcrypt.hash(password, 10)
     .then((hash) => Users.create({
@@ -64,12 +60,12 @@ const updateUserInfo = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail(() => {
-      throw new ErrorNotFound('Запрашиваемый пользователь не найден');
+      next( new ErrorNotFound('Запрашиваемый пользователь не найден'));
     })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные при обновлении профиля');
+        next(new BadRequest('Переданы некорректные данные при обновлении профиля')) ;
       }
     })
     .catch(next);
@@ -83,12 +79,12 @@ const updateAvatar = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail(() => {
-      throw new ErrorNotFound('Запрашиваемый пользователь не найден');
+      next( new ErrorNotFound('Запрашиваемый пользователь не найден'));
     })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        throw new BadRequest('Переданы некорректные данные при обновлении аватара');
+        next(new BadRequest('Переданы некорректные данные при обновлении аватара')) ;
       }
     })
     .catch(next);
