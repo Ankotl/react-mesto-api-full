@@ -60,12 +60,12 @@ const updateUserInfo = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail(() => {
-      next( new ErrorNotFound('Запрашиваемый пользователь не найден'));
+      next(new ErrorNotFound('Запрашиваемый пользователь не найден'));
     })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BadRequest('Переданы некорректные данные при обновлении профиля')) ;
+        next(new BadRequest('Переданы некорректные данные при обновлении профиля'));
       }
     })
     .catch(next);
@@ -79,12 +79,12 @@ const updateAvatar = (req, res, next) => {
     { new: true, runValidators: true },
   )
     .orFail(() => {
-      next( new ErrorNotFound('Запрашиваемый пользователь не найден'));
+      next(new ErrorNotFound('Запрашиваемый пользователь не найден'));
     })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные при обновлении аватара')) ;
+        next(new BadRequest('Переданы некорректные данные при обновлении аватара'));
       }
     })
     .catch(next);

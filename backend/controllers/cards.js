@@ -37,14 +37,14 @@ const likeCard = (req, res, next) => {
       if (err.statusCode === 404) {
         return next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
       }
-      next(err);
+      return next(err);
     });
 };
 
 const dislikeCard = (req, res, next) => {
   Cards.findByIdAndUpdate(req.params.cardId, { $pull: { likes: req.user._id } }, { new: true })
     .orFail(() => {
-      next(new ErrorNotFound('Запрашиваемая карточка не найдена')) ;
+      next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
     })
     .then((card) => res.send(card))
     .catch((err) => {
@@ -54,7 +54,7 @@ const dislikeCard = (req, res, next) => {
       if (err.statusCode === 404) {
         return next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
       }
-      next(err);
+      return next(err);
     });
 };
 
@@ -63,13 +63,13 @@ const deleteCard = (req, res, next) => {
 
   return Cards.findById(cardId)
     .orFail(() => {
-      next(new ErrorNotFound('Запрашиваемая карточка не найдена')) ;
+      next(new ErrorNotFound('Запрашиваемая карточка не найдена'));
     })
     .then((card) => {
       if (card.owner.toString() === req.user._id) {
         Cards.findByIdAndRemove(cardId).then(() => res.send(card)).catch(next);
       } else {
-        next(new ForbiddenError('В доступе отказано')) ;
+        next(new ForbiddenError('В доступе отказано'));
       }
     })
     .catch(next);
