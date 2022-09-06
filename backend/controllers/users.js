@@ -66,9 +66,8 @@ const updateUserInfo = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы некорректные данные при обновлении профиля'));
-      }
-      else {
-        next(err)
+      } else {
+        next(err);
       }
     })
     .catch(next);
@@ -88,9 +87,8 @@ const updateAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
         next(new BadRequest('Переданы некорректные данные при обновлении аватара'));
-      }
-      else {
-        next(err)
+      } else {
+        next(err);
       }
     })
     .catch(next);
