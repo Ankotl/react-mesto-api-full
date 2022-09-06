@@ -17,6 +17,9 @@ const createCard = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new BadRequest('Переданы невалидные данные при создании карточки'));
       }
+      else {
+        next(err)
+      }
     }).catch(next);
 };
 
